@@ -1,2 +1,4 @@
-# mmap
-Memory-mapped buffers, using the mmap system call
+"Mmap"
+======
+
+Memory-mapped buffers, using the `mmap` system call.

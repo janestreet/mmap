@@ -1,0 +1,10 @@
+(library
+ (foreign_stubs
+  (language c)
+  (names mmap_stubs)
+  (flags -fPIC))
+ (name mmap)
+ (public_name mmap)
+ (libraries core core_unix core_kernel.flags ocaml_intrinsics)
+ (preprocess
+  (pps ppx_jane)))

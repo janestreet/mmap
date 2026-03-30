@@ -1,0 +1,6 @@
+(library
+ (name mmap_test)
+ (libraries core_unix.bigstring_unix core core_unix expect_test_helpers_core
+   mmap ocaml_intrinsics)
+ (preprocess
+  (pps ppx_jane)))

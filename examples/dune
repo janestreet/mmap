@@ -1,0 +1,6 @@
+(executables
+ (modes byte exe)
+ (names fork_mmap)
+ (libraries core core_unix mmap)
+ (preprocess
+  (pps ppx_jane)))
