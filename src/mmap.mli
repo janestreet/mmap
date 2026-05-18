@@ -4,7 +4,7 @@ module Unix := Core_unix
 (** Support for an expanded range of mmap() system calls. *)
 
 (** Type of memory mapped buffers. *)
-type t [@@deriving sexp_of]
+type t : mutable_data [@@deriving sexp_of]
 
 (** Return the actual memory mapped buffer. *)
 val bigstring : t -> Bigstring.t
