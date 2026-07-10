@@ -303,13 +303,14 @@ CAMLprim value zero_mmap_mremap(value v_bstr, value v_newsize, value v_flags) {
 CAMLprim value zero_fallocate(value v_fd, value v_pos, value v_len) {
   intnat len = Long_val(v_len);
   off64_t pos = Int64_val(v_pos);
+  int ret;
 
   /* 0 is the "mode" argument.  From the man pages: "The default
      operation (i.e., mode is zero) of fallocate() allocates and
      initializes to zero the disk space within the range specified
      by offset and len." */
-  if (fallocate(Int_val(v_fd), 0, pos, len)) {
-    return Val_int(errno);
-  }
-  return Val_int(0);
+  do {
+    ret = fallocate(Int_val(v_fd), 0, pos, len);
+  } while (ret != 0 && errno == EINTR);
+  return Val_int(ret ? errno : 0);
 }

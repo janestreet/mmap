@@ -6,10 +6,9 @@
 #include <caml/mlvalues.h>
 #include <caml/fail.h>
 
-/* We colorize external values in black to be future-proof with Mark's
-   patches to remove [caml_page_table_lookup]. */
-
+#ifndef CAML_RUNTIME_5
 #include <caml/gc.h> /* Make_header etc */
+#endif
 
 /* We insist on 8-byte alignment even though only 2 is required, for future
    expansion. */

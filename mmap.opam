@@ -20,6 +20,9 @@ depends: [
   "dune"             {>= "3.17.0"}
 ]
 available: arch != "x86_32"
+conflicts: [
+  "oxcaml-compiler" {< "5.2.0minus39"}
+]
 synopsis: "Memory-mapped buffers, using the mmap system call"
 description: "
 Provides some convenience functions for creating memory-mapped buffers when writing low-level code.
