@@ -200,3 +200,41 @@ let%expect_test "access via ext_pointer" =
   let got = Ocaml_intrinsics.Ext_pointer.load_unboxed_int64 pointer in
   require_eq [%here] 70 (got |> Int.of_int64_exn)
 ;;
+
+let%expect_test "fallocate extends a file with zero-filled blocks" =
+  test (fun fd ->
+    let len = 8 * 4096 in
+    let { Unix.st_size = size_before; _ } = Unix.fstat fd in
+    [%test_result: int64] ~expect:0L size_before;
+    fallocate fd ~len ();
+    let { Unix.st_size = size_after; _ } = Unix.fstat fd in
+    [%test_result: int64] ~expect:(Int64.of_int len) size_after;
+    let mmap =
+      mmap64
+        fd
+        ~visibility:Map_visibility.Shared
+        ~len
+        ~protection:Protection.(read + write)
+        ()
+    in
+    let data = bigstring mmap in
+    for i = 0 to (len / 8) - 1 do
+      [%test_result: int] ~expect:0 (Bigstring.unsafe_get_int64_le_exn data ~pos:(i * 8))
+    done;
+    Bigstring.unsafe_destroy data;
+    [%expect {| |}])
+;;
+
+let%expect_test "fallocate at a non-zero offset extends the file" =
+  test (fun fd ->
+    fallocate fd ~pos:4096L ~len:4096 ();
+    let { Unix.st_size; _ } = Unix.fstat fd in
+    [%test_result: int64] ~expect:8192L st_size;
+    [%expect {| |}])
+;;
+
+let%expect_test "fallocate raises Unix_error on a bad fd" =
+  Expect_test_helpers_core.show_raise (fun () ->
+    fallocate (Core_unix.File_descr.of_int (-1)) ~len:4096 ());
+  [%expect {| (raised (Unix.Unix_error "Bad file descriptor" fallocate "")) |}]
+;;
