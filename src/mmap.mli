@@ -8,6 +8,7 @@ type t [@@deriving sexp_of]
 
 (** Return the actual memory mapped buffer. *)
 val bigstring : t -> Bigstring.t
+[@@zero_alloc]
 
 (** Return an [Ext_pointer.t] to the beginning of the data buffer in memory. Importantly,
     this points to the actual data, not the header that precedes it.
@@ -188,7 +189,7 @@ val mprotect : t -> ?pos:int -> ?len:int -> protection:Protection.t -> unit -> u
 
 (** see madvise(2) man pages for a description of advice flags. *)
 module Advice : sig
-  type t = private Int63.t [@@deriving compare ~localize, sexp]
+  type t = private Int63.t [@@deriving compare, sexp]
 
   include Stringable with type t := t
 

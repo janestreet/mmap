@@ -239,7 +239,7 @@ let msync t ?(pos = 0) ?(len = len_after t.bigstring ~pos) ?(flags = Sync_flags.
 ;;
 
 module Advice = struct
-  type t = Int63.t [@@deriving compare ~localize]
+  type t = Int63.t [@@deriving compare]
 
   let of_int63 t = t
 
