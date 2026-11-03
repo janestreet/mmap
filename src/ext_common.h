@@ -6,10 +6,6 @@
 #include <caml/mlvalues.h>
 #include <caml/fail.h>
 
-#ifndef CAML_RUNTIME_5
-#include <caml/gc.h> /* Make_header etc */
-#endif
-
 /* We insist on 8-byte alignment even though only 2 is required, for future
    expansion. */
 

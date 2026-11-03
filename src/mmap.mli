@@ -8,6 +8,7 @@ type t : mutable_data [@@deriving sexp_of]
 
 (** Return the actual memory mapped buffer. *)
 val bigstring : t -> Bigstring.t
+[@@zero_alloc]
 
 (** Return an [Ext_pointer.t] to the beginning of the data buffer in memory. Importantly,
     this points to the actual data, not the header that precedes it.
